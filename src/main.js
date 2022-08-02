@@ -96,6 +96,8 @@ let _options = {
         decreaseText: 'decrease text size',
         increaseTextSpacing: 'increase text spacing',
         decreaseTextSpacing: 'decrease text spacing',
+        increaseLineHeight: 'increase line height',
+        decreaseLineHeight: 'decrease line height',
         invertColors: 'invert colors',
         grayHues: 'gray hues',
         bigCursor: 'big cursor',
@@ -642,6 +644,30 @@ export class Accessibility {
                         {
                             type: 'li',
                             attrs: {
+                                'data-access-action': 'increaseLineHeight'
+                            },
+                            children: [
+                                {
+                                    type: '#text',
+                                    text: this.options.labels.increaseLineHeight
+                                }
+                            ]
+                        },
+                        {
+                            type: 'li',
+                            attrs: {
+                                'data-access-action': 'decreaseLineHeight'
+                            },
+                            children: [
+                                {
+                                    type: '#text',
+                                    text: this.options.labels.decreaseLineHeight
+                                }
+                            ]
+                        },
+                        {
+                            type: 'li',
+                            attrs: {
                                 'data-access-action': 'invertColors',
                                 'title': this.parseKeys(this.options.hotkeys.keys.invertColors)
                             },
@@ -932,6 +958,48 @@ export class Accessibility {
         }
     }
 
+    alterLineHeight(isIncrease) {
+        this.sessionState.lineHeight += isIncrease ? 1 : -1;
+        this.onChange(true);
+        let factor = 2;
+        if (!isIncrease)
+            factor *= -1;
+
+        let all = document.querySelectorAll('*:not(._access)');
+        let exclude = Array.prototype.slice.call(document.querySelectorAll('._access-menu *'));
+
+        for (let i = 0; i < all.length; i++) {
+            if (exclude.includes(all[i])) {
+                continue;
+            }
+
+            if (this.options.textPixelMode) {
+                    let lHeight = getComputedStyle(all[i]).lineHeight;
+                    if (lHeight && (lHeight.indexOf('px') > -1)) {
+                        if (!all[i].getAttribute('data-init-line-height'))
+                            all[i].setAttribute('data-init-line-height', lHeight);
+                        lHeight = (lHeight.replace('px', '') * 1) + factor;
+                        all[i].style.lineHeight = lHeight + 'px';
+                    }
+            }
+
+            else if (this.options.textEmlMode) {
+                let lTextSize = getComputedStyle(all[i]).fontSize;
+                let lHeight = getComputedStyle(all[i]).lineHeight;
+                let lHeight2 = (lHeight.replace('px', '') * 1);
+                let lTextSize2 = (lTextSize.replace('px', '') * 1)
+                let inPercent = (lHeight2*100)/lTextSize2;
+                // console.log(`lheight for text size ${lTextSize} is ${lHeight} which is ${inPercent} percent}`);
+                if (lHeight && (lHeight.indexOf('px') > -1)) {
+                    if (!all[i].getAttribute('data-init-line-height'))
+                        all[i].setAttribute('data-init-line-height', inPercent + '%');
+                    inPercent += factor;
+                    all[i].style.lineHeight = inPercent + '%';
+                }
+            }
+        }
+    }
+
     speechToText() {
         if ('webkitSpeechRecognition' in window) {
             this.recognition = new webkitSpeechRecognition();
@@ -1143,6 +1211,12 @@ export class Accessibility {
             },
             decreaseTextSpacing: () => {
                 this.alterTextSpace(false);
+            },
+            increaseLineHeight: () => {
+                this.alterLineHeight(true);
+            },
+            decreaseLineHeight: () => {
+                this.alterLineHeight(false);
             },
             invertColors: (destroy) => {
                 if (typeof this.initialValues.html.backgroundColor === 'undefined')
