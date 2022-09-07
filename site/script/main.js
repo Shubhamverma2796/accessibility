@@ -13,7 +13,7 @@ var options = {
 		url: ''
 	},
 	language : {
-		textToSpeechLang: '',
+		textToSpeechLang: 'en-US',
 		speechToTextLang: '',
 	}
 

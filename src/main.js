@@ -755,53 +755,53 @@ export class Accessibility {
         }))
     }
     
-    async injectTts() {
-        console.log("tts called");
-        let voices = await this.getVoices();
-        let isLngSupported = false;
-        for (let i = 0; i < voices.length; i++) {
-            if (voices[i].lang === this.options.language.textToSpeechLang) {
-                isLngSupported = true;
-                break;
-            }
-        }
-        console.log(`language supported : ${isLngSupported}`);
+    // async injectTts() {
+    //     console.log("tts called");
+    //     let voices = await this.getVoices();
+    //     let isLngSupported = false;
+    //     for (let i = 0; i < voices.length; i++) {
+    //         if (voices[i].lang === this.options.language.textToSpeechLang) {
+    //             isLngSupported = true;
+    //             break;
+    //         }
+    //     }
+    //     console.log(`language supported : ${isLngSupported}`);
         
-        if(isLngSupported) {
-            console.log("language supported");
-            let tts = common.jsonToHtml(
-                {
-                    type: 'li',
-                    attrs: {
-                        'data-access-action': 'textToSpeech'
-                    },
-                    children: [
-                        {
-                            type: '#text',
-                            text: this.options.labels.textToSpeech
-                        }
-                    ]
-                }
-            );
-        let sts = common.jsonToHtml(
-            {
-                type: 'li',
-                attrs: {
-                    'data-access-action': 'speechToText'
-                },
-                children: [
-                    {
-                        type: '#text',
-                        text: this.options.labels.speechToText
-                    }
-                ]
-            }
-        );
-        let ul = document.querySelector('._access-menu ul');
-        ul.appendChild(tts);
-        ul.appendChild(sts);
-        }
-    }
+    //     if(isLngSupported) {
+    //         console.log("language supported");
+    //         let tts = common.jsonToHtml(
+    //             {
+    //                 type: 'li',
+    //                 attrs: {
+    //                     'data-access-action': 'textToSpeech'
+    //                 },
+    //                 children: [
+    //                     {
+    //                         type: '#text',
+    //                         text: this.options.labels.textToSpeech
+    //                     }
+    //                 ]
+    //             }
+    //         );
+    //     let sts = common.jsonToHtml(
+    //         {
+    //             type: 'li',
+    //             attrs: {
+    //                 'data-access-action': 'speechToText'
+    //             },
+    //             children: [
+    //                 {
+    //                     type: '#text',
+    //                     text: this.options.labels.speechToText
+    //                 }
+    //             ]
+    //         }
+    //     );
+    //     let ul = document.querySelector('._access-menu ul');
+    //     ul.appendChild(tts);
+    //     ul.appendChild(sts);
+    //     }
+    // }
 
     addListeners() {
         let lis = document.querySelectorAll('._access-menu ul li');
@@ -1104,7 +1104,7 @@ export class Accessibility {
         this.injectCss();
         this.icon = this.injectIcon();
         this.menu = this.injectMenu();
-        this.injectTts();
+        // this.injectTts();
         setTimeout(()=>{
             this.addListeners();
             this.disableUnsupportedModules();
