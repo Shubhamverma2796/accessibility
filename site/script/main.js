@@ -4,8 +4,19 @@ var options = {
 	},
 	icon: {
 		circular: true,
-		img: 'accessible'
+		img: 'accessibility'
+	},
+	statement : {
+		url: ''
+	},
+	feedback : {
+		url: ''
+	},
+	language : {
+		textToSpeechLang: '',
+		speechToTextLang: '',
 	}
+
 }
 
 window.addEventListener('load', function () { new Accessibility(options); }, false);
