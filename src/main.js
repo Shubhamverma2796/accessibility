@@ -698,19 +698,6 @@ export class Accessibility {
                                     text: this.options.labels.bigCursor
                                 }
                             ]
-                        },
-                        {
-                            type: 'li',
-                            attrs: {
-                                'data-access-action': 'readingGuide',
-                                'title': this.parseKeys(this.options.hotkeys.keys.readingGuide)
-                            },
-                            children: [
-                                {
-                                    type: '#text',
-                                    text: this.options.labels.readingGuide
-                                }
-                            ]
                         }
                     ]
                 }
